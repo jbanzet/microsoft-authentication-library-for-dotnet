@@ -209,13 +209,16 @@ namespace Microsoft.Identity.Client
                         instanceDiscoveryMetadata.PreferredCache,
                         response.FamilyId);
 
-                    //SaveToLegacyAdalCache(
-                    //    requestParams,
-                    //    response,
-                    //    msalRefreshTokenCacheItem,
-                    //    msalIdTokenCacheItem,
-                    //    tenantId,
-                    //    instanceDiscoveryMetadata);
+                    if (msalIdTokenCacheItem != null)
+                    {
+                        SaveToLegacyAdalCache(
+                            requestParams,
+                            response,
+                            msalRefreshTokenCacheItem,
+                            msalIdTokenCacheItem,
+                            tenantId,
+                            instanceDiscoveryMetadata);
+                    }
                 }
                 finally
                 {

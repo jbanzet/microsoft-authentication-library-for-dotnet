@@ -102,13 +102,11 @@ namespace Microsoft.Identity.Test.Integration.HeadlessTests
             authenticationResult = await _confidentialApp.AcquireTokenOnBehalfOf(scopes2, userAssertion)
                                                          .ExecuteAsync().ConfigureAwait(false);
 
-            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash)
-    .ExecuteAsync().ConfigureAwait(false);
+            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash).ExecuteAsync().ConfigureAwait(false);
 
             TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
 
-            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash)
-.ExecuteAsync().ConfigureAwait(false);
+            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash).ExecuteAsync().ConfigureAwait(false);
 
             TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
 
@@ -121,6 +119,7 @@ namespace Microsoft.Identity.Test.Integration.HeadlessTests
             Assert.IsTrue(userCacheRecorder.LastAfterAccessNotificationArgs.HasTokens);
             Assert.AreEqual(atHash, userCacheRecorder.LastAfterAccessNotificationArgs.SuggestedCacheKey);
             Assert.AreEqual(TokenSource.IdentityProvider, authenticationResult.AuthenticationResultMetadata.TokenSource);
+            Assert.AreEqual(CacheRefreshReason.Expired, authenticationResult.AuthenticationResultMetadata.CacheRefreshReason);
         }
 
         [TestInitialize]
