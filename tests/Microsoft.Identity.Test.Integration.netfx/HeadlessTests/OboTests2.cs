@@ -88,7 +88,7 @@ namespace Microsoft.Identity.Test.Integration.HeadlessTests
                 .Create(OBOServicePpeClientID)
                 .WithAuthority(PPEAuthenticationAuthority)
                 .WithCertificate(cert)
-                .Build();
+                .BuildConcrete();
 
             var userCacheRecorder = _confidentialApp.UserTokenCache.RecordAccess();
 
@@ -102,12 +102,25 @@ namespace Microsoft.Identity.Test.Integration.HeadlessTests
             authenticationResult = await _confidentialApp.AcquireTokenOnBehalfOf(scopes2, userAssertion)
                                                          .ExecuteAsync().ConfigureAwait(false);
 
+            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash)
+    .ExecuteAsync().ConfigureAwait(false);
+
+            TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
+
+            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash)
+.ExecuteAsync().ConfigureAwait(false);
+
+            TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
+
+            authenticationResult = await _confidentialApp.AcquireTokenInLongRunningProcess(scopes2, atHash).ExecuteAsync().ConfigureAwait(false);
+
+
             Assert.IsNotNull(authenticationResult);
             Assert.IsNotNull(authenticationResult.AccessToken);
             Assert.IsTrue(!userCacheRecorder.LastAfterAccessNotificationArgs.IsApplicationCache);
             Assert.IsTrue(userCacheRecorder.LastAfterAccessNotificationArgs.HasTokens);
             Assert.AreEqual(atHash, userCacheRecorder.LastAfterAccessNotificationArgs.SuggestedCacheKey);
-            Assert.AreEqual(TokenSource.Cache, authenticationResult.AuthenticationResultMetadata.TokenSource);
+            Assert.AreEqual(TokenSource.IdentityProvider, authenticationResult.AuthenticationResultMetadata.TokenSource);
         }
 
         [TestInitialize]

@@ -134,9 +134,9 @@ namespace Microsoft.Identity.Client.Internal.Requests
                 // If a refresh token is not found, fetch a new access token
                 if (cachedRefreshToken != null)
                 {
-                    var clientInfo = ClientInfo.CreateFromJson(cachedRefreshToken.RawClientInfo);
-                    _ccsRoutingHint = CoreHelpers.GetCcsClientInfoHint(clientInfo.UniqueObjectIdentifier,
-                                                                                      clientInfo.UniqueTenantIdentifier);
+                    //var clientInfo = ClientInfo.CreateFromJson(cachedRefreshToken.RawClientInfo);
+                    //_ccsRoutingHint = CoreHelpers.GetCcsClientInfoHint(clientInfo.UniqueObjectIdentifier,
+                    //                                                                  clientInfo.UniqueTenantIdentifier);
 
                     var msalTokenResponse = await SilentRequestHelper.RefreshAccessTokenAsync(cachedRefreshToken, this, AuthenticationRequestParameters, cancellationToken)
                     .ConfigureAwait(false);
