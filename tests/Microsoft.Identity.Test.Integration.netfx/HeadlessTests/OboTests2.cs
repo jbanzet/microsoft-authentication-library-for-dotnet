@@ -92,26 +92,15 @@ namespace Microsoft.Identity.Test.Integration.HeadlessTests
 
             var userCacheRecorder = _confidentialApp.UserTokenCache.RecordAccess();
 
-            authenticationResult = await _confidentialApp.AcquireTokenOnBehalfOf(scopes2, userAssertion)
-                                                         .ExecuteAsync().ConfigureAwait(false);
-
             Assert.IsNotNull(authenticationResult);
             Assert.IsNotNull(authenticationResult.AccessToken);
             Assert.AreEqual(TokenSource.IdentityProvider, authenticationResult.AuthenticationResultMetadata.TokenSource);
-
-            authenticationResult = await _confidentialApp.AcquireTokenOnBehalfOf(scopes2, userAssertion)
-                                                         .ExecuteAsync().ConfigureAwait(false);
-
-            authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash).ExecuteAsync().ConfigureAwait(false);
-
-            TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
 
             authenticationResult = await _confidentialApp.InitiateLongRunningProcessInWebApi(scopes2, appToken, ref atHash).ExecuteAsync().ConfigureAwait(false);
 
             TokenCacheHelper.ExpireAllAccessTokens(_confidentialApp.UserTokenCacheInternal);
 
             authenticationResult = await _confidentialApp.AcquireTokenInLongRunningProcess(scopes2, atHash).ExecuteAsync().ConfigureAwait(false);
-
 
             Assert.IsNotNull(authenticationResult);
             Assert.IsNotNull(authenticationResult.AccessToken);
