@@ -12,7 +12,7 @@ steps:
 - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@1
   displayName: 'Sign Binary: ${{ parameters.Pattern }}'
   inputs:
-    ConnectedServiceName: 'IDDP Code Signing'
+    ConnectedServiceName: '.NET ESRP Signing'
     FolderPath: ${{ parameters.FolderPath }}
     Pattern: ${{ parameters.Pattern }}
     UseMinimatch: true
